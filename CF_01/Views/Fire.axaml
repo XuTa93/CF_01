@@ -1,0 +1,272 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="CF_01.Fire">
+  <Canvas Width="800" Height="450" Background="#0d0d0f">
+
+    <!-- BACKGROUND GLOW EFFECTS - Đơn giản chỉ dùng Opacity animation -->
+    
+    <!-- Glow layer 1 - Lớn nhất, đỏ cam tối -->
+    <Ellipse Width="500" Height="500"
+             Fill="#FF7A2A00"
+             Opacity="0"
+             Canvas.Left="150" Canvas.Top="-30">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse">
+          <Style.Animations>
+            <Animation Duration="0:0:0.9" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.3"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.5"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Glow layer 2 - Vừa, cam sáng hơn -->
+    <Ellipse Width="300" Height="300"
+             Fill="#FFFF8C00"
+             Opacity="0"
+             Canvas.Left="250" Canvas.Top="75">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse">
+          <Style.Animations>
+            <Animation Duration="0:0:0.6" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.4"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.65"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Glow layer 3 - Nhỏ, vàng sáng -->
+    <Ellipse Width="180" Height="180"
+             Fill="#FFFFD34D"
+             Opacity="0"
+             Canvas.Left="310" Canvas.Top="135">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse">
+          <Style.Animations>
+            <Animation Duration="0:0:0.4" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.5"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.75"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Heat distortion overlay - rung nhẹ -->
+    <Rectangle x:Name="HeatOverlay"
+               Width="800" Height="450"
+               Fill="#05000000"
+               Opacity="0"
+               Canvas.Left="0" Canvas.Top="0">
+      <Rectangle.Styles>
+        <Style Selector="Rectangle#HeatOverlay">
+          <Style.Animations>
+            <Animation Duration="0:0:0.15" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.15"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.3"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Rectangle.Styles>
+    </Rectangle>
+
+    <!-- FLAME LAYERS - Lớp lửa (có thể xóa nếu bạn tự làm) -->
+    
+    <!-- Base flame - Đỏ -->
+    <Ellipse x:Name="BaseFlame"
+             Width="100" Height="180"
+             Fill="#FFFF3B00"
+             Opacity="0"
+             Canvas.Left="350" Canvas.Top="250">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#BaseFlame">
+          <Style.Animations>
+            <Animation Duration="0:0:0.2" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.7"/>
+                <Setter Property="Height" Value="180"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.85"/>
+                <Setter Property="Height" Value="200"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Mid flame - Cam -->
+    <Ellipse x:Name="MidFlame"
+             Width="70" Height="140"
+             Fill="#FFFF8C00"
+             Opacity="0"
+             Canvas.Left="365" Canvas.Top="280">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#MidFlame">
+          <Style.Animations>
+            <Animation Duration="0:0:0.16" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.75"/>
+                <Setter Property="Height" Value="140"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.9"/>
+                <Setter Property="Height" Value="160"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Inner flame - Vàng -->
+    <Ellipse x:Name="InnerFlame"
+             Width="40" Height="90"
+             Fill="#FFFFD34D"
+             Opacity="0"
+             Canvas.Left="380" Canvas.Top="320">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#InnerFlame">
+          <Style.Animations>
+            <Animation Duration="0:0:0.12" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.85"/>
+                <Setter Property="Height" Value="90"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Height" Value="110"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- Core - Trắng sáng -->
+    <Ellipse x:Name="Core"
+             Width="12" Height="35"
+             Fill="White"
+             Opacity="0"
+             Canvas.Left="394" Canvas.Top="360">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Core">
+          <Style.Animations>
+            <Animation Duration="0:0:0.08" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0.9"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0.5"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <!-- SPARKS - Tia lửa bay -->
+    <Ellipse x:Name="Spark1"
+             Width="5" Height="5"
+             Fill="#FFFFD34D"
+             Opacity="0"
+             Canvas.Left="395" Canvas.Top="360">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark1">
+          <Style.Animations>
+            <Animation Duration="0:0:0.6" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="360"/>
+              </KeyFrame>
+              <KeyFrame Cue="30%">
+                <Setter Property="Opacity" Value="0.9"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="250"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark2"
+             Width="4" Height="4"
+             Fill="#FFFF8C00"
+             Opacity="0"
+             Canvas.Left="385" Canvas.Top="365">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark2">
+          <Style.Animations>
+            <Animation Duration="0:0:0.75" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="365"/>
+              </KeyFrame>
+              <KeyFrame Cue="25%">
+                <Setter Property="Opacity" Value="0.8"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="240"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark3"
+             Width="3" Height="3"
+             Fill="#FFFFD34D"
+             Opacity="0"
+             Canvas.Left="405" Canvas.Top="355">
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark3">
+          <Style.Animations>
+            <Animation Duration="0:0:0.55" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="355"/>
+              </KeyFrame>
+              <KeyFrame Cue="35%">
+                <Setter Property="Opacity" Value="1"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="(Canvas.Top)" Value="260"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+  </Canvas>
+</UserControl>
