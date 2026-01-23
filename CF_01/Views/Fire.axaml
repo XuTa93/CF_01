@@ -2,90 +2,159 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:gif="clr-namespace:Avalonia.Labs.Gif;assembly=Avalonia.Labs.Gif"
+             xmlns:vm="using:CF_01.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="CF_01.Fire">
+             x:Class="CF_01.Views.Fire"
+             x:DataType="vm:FireViewModel">
   <Canvas Width="800" Height="450" Background="#0d0d0f">
 
-    <!-- BACKGROUND GLOW EFFECTS - Đơn giản chỉ dùng Opacity animation -->
+    <!-- 3 GIF CANH GIỮA - Công thức: (800-Width)/2 và (450-Height)/2 -->
     
-    <!-- Glow layer 1 - Lớn nhất, đỏ cam tối -->
-    <Ellipse Width="500" Height="500"
-             Fill="#FF7A2A00"
-             Opacity="0"
-             Canvas.Left="150" Canvas.Top="-30">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse">
-          <Style.Animations>
-            <Animation Duration="0:0:0.9" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.3"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.5"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
+    <!-- Fire LOW - 600x400 -> Left=(800-600)/2=100, Top=(450-400)/2=25 -->
+    <gif:GifImage x:Name="FireLowGif"
+                  Source="avares://CF_01/Assets/FireL.gif" 
+                  Width="600" Height="400"
+                  Canvas.Left="100" Canvas.Top="25"
+                  StretchDirection="Both"
+                  Stretch="UniformToFill"
+                  IsVisible="{Binding IsLowTemperature}"/>
 
-    <!-- Glow layer 2 - Vừa, cam sáng hơn -->
-    <Ellipse Width="300" Height="300"
-             Fill="#FFFF8C00"
-             Opacity="0"
-             Canvas.Left="250" Canvas.Top="75">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse">
-          <Style.Animations>
-            <Animation Duration="0:0:0.6" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.4"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.65"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
+    <!-- Fire NORMAL - 650x400 -> Left=(800-650)/2=75, Top=(450-400)/2=25 -->
+    <gif:GifImage x:Name="FireNormalGif"
+                  Source="avares://CF_01/Assets/Fire.gif" 
+                  Width="500" Height="400"
+                  Canvas.Left="130" Canvas.Top="25"
+                  StretchDirection="Both"
+                  Stretch="UniformToFill"
+                  IsVisible="{Binding IsNormalTemperature}"/>
 
-    <!-- Glow layer 3 - Nhỏ, vàng sáng -->
-    <Ellipse Width="180" Height="180"
-             Fill="#FFFFD34D"
-             Opacity="0"
-             Canvas.Left="310" Canvas.Top="135">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse">
-          <Style.Animations>
-            <Animation Duration="0:0:0.4" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.5"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.75"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
+    <!-- Fire HIGH - 650x450 -> Left=(800-650)/2=75, Top=(450-450)/2=0 -->
+    <gif:GifImage x:Name="FireHighGif"
+                  Source="avares://CF_01/Assets/FireH.gif" 
+                  Width="650" Height="450"
+                  Canvas.Left="50" Canvas.Top="0"
+                  StretchDirection="Both"
+                  Stretch="UniformToFill"
+                  IsVisible="{Binding IsHighTemperature}"/>
 
-    <!-- Heat distortion overlay - rung nhẹ -->
+    <!-- THERMOMETER -->
+    <Border Canvas.Left="620" Canvas.Top="60"
+            Width="140" Height="350"
+            Background="#222222"
+            BorderBrush="#555555"
+            BorderThickness="3"
+            CornerRadius="70,70,15,15"
+            Padding="15">
+      
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Width="50"
+                Height="260"
+                Background="#333333"
+                BorderBrush="#666666"
+                BorderThickness="3"
+                CornerRadius="25"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+          
+          <Canvas>
+            <StackPanel Canvas.Left="55" Canvas.Top="5" Spacing="28">
+              <TextBlock Text="45°" Foreground="#FF4444" FontSize="12" FontWeight="Bold"/>
+              <TextBlock Text="40°" Foreground="#FF6644" FontSize="11"/>
+              <TextBlock Text="35°" Foreground="#FF8844" FontSize="11"/>
+              <TextBlock Text="30°" Foreground="#FFAA44" FontSize="11"/>
+              <TextBlock Text="25°" Foreground="#FFCC44" FontSize="11"/>
+              <TextBlock Text="20°" Foreground="#FFEE44" FontSize="11"/>
+              <TextBlock Text="15°" Foreground="#88CCFF" FontSize="11"/>
+              <TextBlock Text="10°" Foreground="#4488FF" FontSize="12" FontWeight="Bold"/>
+            </StackPanel>
+
+            <Border Canvas.Left="10" Canvas.Bottom="5"
+                    Width="30"
+                    Background="{Binding MercuryBrush}"
+                    CornerRadius="15"
+                    Height="{Binding MercuryHeight}">
+              <Border.Effect>
+                <DropShadowEffect BlurRadius="20" Opacity="0.9" OffsetX="0" OffsetY="0"/>
+              </Border.Effect>
+            </Border>
+          </Canvas>
+        </Border>
+
+        <Border Grid.Row="1"
+                Width="70" Height="70"
+                Background="{Binding MercuryBrush}"
+                CornerRadius="35"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Center">
+          <Border.Effect>
+            <DropShadowEffect BlurRadius="25" Opacity="0.95" OffsetX="0" OffsetY="0"/>
+          </Border.Effect>
+          
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}°C'}"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Foreground="White"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="Black" BlurRadius="5" Opacity="0.9"/>
+            </TextBlock.Effect>
+          </TextBlock>
+        </Border>
+      </Grid>
+    </Border>
+
+    <!-- Heat distortion overlay -->
     <Rectangle x:Name="HeatOverlay"
                Width="800" Height="450"
-               Fill="#05000000"
+               Fill="#0A000000"
                Opacity="0"
                Canvas.Left="0" Canvas.Top="0">
+      <Rectangle.RenderTransform>
+        <TranslateTransform X="0" Y="0"/>
+      </Rectangle.RenderTransform>
       <Rectangle.Styles>
         <Style Selector="Rectangle#HeatOverlay">
           <Style.Animations>
-            <Animation Duration="0:0:0.15" IterationCount="Infinite" PlaybackDirection="Alternate">
+            <Animation Duration="0:0:0.12" IterationCount="Infinite" PlaybackDirection="Alternate">
               <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.15"/>
+                <Setter Property="Opacity" Value="0.25"/>
               </KeyFrame>
               <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.3"/>
+                <Setter Property="Opacity" Value="0.45"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        
+        <Style Selector="Rectangle#HeatOverlay > TranslateTransform">
+          <Style.Animations>
+            <Animation Duration="0:0:0.08" IterationCount="Infinite" PlaybackDirection="Alternate">
+              <KeyFrame Cue="0%">
+                <Setter Property="X" Value="-5"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="X" Value="5"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+        
+        <Style Selector="Rectangle#HeatOverlay > TranslateTransform">
+          <Style.Animations>
+            <Animation Duration="0:0:1.5" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Y" Value="0"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Y" Value="-100"/>
               </KeyFrame>
             </Animation>
           </Style.Animations>
@@ -93,122 +162,38 @@
       </Rectangle.Styles>
     </Rectangle>
 
-    <!-- FLAME LAYERS - Lớp lửa (có thể xóa nếu bạn tự làm) -->
+    <!-- SPARKS - VỊ TRÍ ĐIỀU CHỈNH THEO CENTER -->
+    <!-- Tất cả sparks giữ nguyên, hoặc bạn có thể điều chỉnh Left để center với lửa -->
     
-    <!-- Base flame - Đỏ -->
-    <Ellipse x:Name="BaseFlame"
-             Width="100" Height="180"
-             Fill="#FFFF3B00"
-             Opacity="0"
-             Canvas.Left="350" Canvas.Top="250">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse#BaseFlame">
-          <Style.Animations>
-            <Animation Duration="0:0:0.2" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.7"/>
-                <Setter Property="Height" Value="180"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.85"/>
-                <Setter Property="Height" Value="200"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
-
-    <!-- Mid flame - Cam -->
-    <Ellipse x:Name="MidFlame"
-             Width="70" Height="140"
-             Fill="#FFFF8C00"
-             Opacity="0"
-             Canvas.Left="365" Canvas.Top="280">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse#MidFlame">
-          <Style.Animations>
-            <Animation Duration="0:0:0.16" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.75"/>
-                <Setter Property="Height" Value="140"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.9"/>
-                <Setter Property="Height" Value="160"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
-
-    <!-- Inner flame - Vàng -->
-    <Ellipse x:Name="InnerFlame"
-             Width="40" Height="90"
-             Fill="#FFFFD34D"
-             Opacity="0"
-             Canvas.Left="380" Canvas.Top="320">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse#InnerFlame">
-          <Style.Animations>
-            <Animation Duration="0:0:0.12" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.85"/>
-                <Setter Property="Height" Value="90"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="1"/>
-                <Setter Property="Height" Value="110"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
-
-    <!-- Core - Trắng sáng -->
-    <Ellipse x:Name="Core"
-             Width="12" Height="35"
-             Fill="White"
-             Opacity="0"
-             Canvas.Left="394" Canvas.Top="360">
-      <Ellipse.Styles>
-        <Style Selector="Ellipse#Core">
-          <Style.Animations>
-            <Animation Duration="0:0:0.08" IterationCount="Infinite" PlaybackDirection="Alternate">
-              <KeyFrame Cue="0%">
-                <Setter Property="Opacity" Value="0.9"/>
-              </KeyFrame>
-              <KeyFrame Cue="100%">
-                <Setter Property="Opacity" Value="0.5"/>
-              </KeyFrame>
-            </Animation>
-          </Style.Animations>
-        </Style>
-      </Ellipse.Styles>
-    </Ellipse>
-
-    <!-- SPARKS - Tia lửa bay -->
+    <!-- Spark 1 - Canvas.Left điều chỉnh: 290 + 100 (offset FireLow) = 390 -->
     <Ellipse x:Name="Spark1"
-             Width="5" Height="5"
+             Width="12" Height="12"
              Fill="#FFFFD34D"
              Opacity="0"
-             Canvas.Left="395" Canvas.Top="360">
+             Canvas.Left="390" Canvas.Top="390">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="25" Color="#FFFFD34D" Opacity="0.95"/>
+      </Ellipse.Effect>
       <Ellipse.Styles>
         <Style Selector="Ellipse#Spark1">
           <Style.Animations>
-            <Animation Duration="0:0:0.6" IterationCount="Infinite">
+            <Animation Duration="0:0:1.2" IterationCount="Infinite">
               <KeyFrame Cue="0%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="360"/>
+                <Setter Property="Width" Value="8"/>
+                <Setter Property="Height" Value="8"/>
+                <Setter Property="(Canvas.Top)" Value="390"/>
               </KeyFrame>
-              <KeyFrame Cue="30%">
-                <Setter Property="Opacity" Value="0.9"/>
+              <KeyFrame Cue="20%">
+                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Width" Value="12"/>
+                <Setter Property="Height" Value="12"/>
               </KeyFrame>
               <KeyFrame Cue="100%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="250"/>
+                <Setter Property="Width" Value="4"/>
+                <Setter Property="Height" Value="4"/>
+                <Setter Property="(Canvas.Top)" Value="50"/>
               </KeyFrame>
             </Animation>
           </Style.Animations>
@@ -217,24 +202,33 @@
     </Ellipse>
 
     <Ellipse x:Name="Spark2"
-             Width="4" Height="4"
+             Width="10" Height="10"
              Fill="#FFFF8C00"
              Opacity="0"
-             Canvas.Left="385" Canvas.Top="365">
+             Canvas.Left="375" Canvas.Top="395">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="20" Color="#FFFF8C00" Opacity="0.9"/>
+      </Ellipse.Effect>
       <Ellipse.Styles>
         <Style Selector="Ellipse#Spark2">
           <Style.Animations>
-            <Animation Duration="0:0:0.75" IterationCount="Infinite">
+            <Animation Duration="0:0:1.4" IterationCount="Infinite">
               <KeyFrame Cue="0%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="365"/>
+                <Setter Property="Width" Value="6"/>
+                <Setter Property="Height" Value="6"/>
+                <Setter Property="(Canvas.Top)" Value="395"/>
               </KeyFrame>
-              <KeyFrame Cue="25%">
-                <Setter Property="Opacity" Value="0.8"/>
+              <KeyFrame Cue="15%">
+                <Setter Property="Opacity" Value="0.9"/>
+                <Setter Property="Width" Value="10"/>
+                <Setter Property="Height" Value="10"/>
               </KeyFrame>
               <KeyFrame Cue="100%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="240"/>
+                <Setter Property="Width" Value="3"/>
+                <Setter Property="Height" Value="3"/>
+                <Setter Property="(Canvas.Top)" Value="70"/>
               </KeyFrame>
             </Animation>
           </Style.Animations>
@@ -243,24 +237,214 @@
     </Ellipse>
 
     <Ellipse x:Name="Spark3"
-             Width="3" Height="3"
+             Width="8" Height="8"
              Fill="#FFFFD34D"
              Opacity="0"
-             Canvas.Left="405" Canvas.Top="355">
+             Canvas.Left="405" Canvas.Top="385">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="18" Color="#FFFFD34D" Opacity="0.85"/>
+      </Ellipse.Effect>
       <Ellipse.Styles>
         <Style Selector="Ellipse#Spark3">
           <Style.Animations>
-            <Animation Duration="0:0:0.55" IterationCount="Infinite">
+            <Animation Duration="0:0:1.0" IterationCount="Infinite">
               <KeyFrame Cue="0%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="355"/>
+                <Setter Property="Width" Value="5"/>
+                <Setter Property="Height" Value="5"/>
+                <Setter Property="(Canvas.Top)" Value="385"/>
               </KeyFrame>
-              <KeyFrame Cue="35%">
+              <KeyFrame Cue="25%">
                 <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Width" Value="8"/>
+                <Setter Property="Height" Value="8"/>
               </KeyFrame>
               <KeyFrame Cue="100%">
                 <Setter Property="Opacity" Value="0"/>
-                <Setter Property="(Canvas.Top)" Value="260"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Height" Value="2"/>
+                <Setter Property="(Canvas.Top)" Value="80"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark4"
+             Width="10" Height="10"
+             Fill="#FFFF3B00"
+             Opacity="0"
+             Canvas.Left="360" Canvas.Top="380">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="22" Color="#FFFF3B00" Opacity="0.9"/>
+      </Ellipse.Effect>
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark4">
+          <Style.Animations>
+            <Animation Duration="0:0:1.3" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="6"/>
+                <Setter Property="Height" Value="6"/>
+                <Setter Property="(Canvas.Left)" Value="360"/>
+                <Setter Property="(Canvas.Top)" Value="380"/>
+              </KeyFrame>
+              <KeyFrame Cue="20%">
+                <Setter Property="Opacity" Value="0.95"/>
+                <Setter Property="Width" Value="10"/>
+                <Setter Property="Height" Value="10"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="3"/>
+                <Setter Property="Height" Value="3"/>
+                <Setter Property="(Canvas.Left)" Value="300"/>
+                <Setter Property="(Canvas.Top)" Value="60"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark5"
+             Width="10" Height="9"
+             Fill="#FFFFEE44"
+             Opacity="0"
+             Canvas.Left="410" Canvas.Top="375">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="20" Color="#FFFFEE44" Opacity="0.85"/>
+      </Ellipse.Effect>
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark5">
+          <Style.Animations>
+            <Animation Duration="0:0:1.5" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="5"/>
+                <Setter Property="Height" Value="5"/>
+                <Setter Property="(Canvas.Left)" Value="410"/>
+                <Setter Property="(Canvas.Top)" Value="375"/>
+              </KeyFrame>
+              <KeyFrame Cue="25%">
+                <Setter Property="Opacity" Value="0.9"/>
+                <Setter Property="Width" Value="9"/>
+                <Setter Property="Height" Value="9"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Height" Value="2"/>
+                <Setter Property="(Canvas.Left)" Value="480"/>
+                <Setter Property="(Canvas.Top)" Value="40"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark6"
+             Width="10" Height="10"
+             Fill="#FFAA44"
+             Opacity="0"
+             Canvas.Left="395" Canvas.Top="388">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="16" Color="#FFAA44" Opacity="0.8"/>
+      </Ellipse.Effect>
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark6">
+          <Style.Animations>
+            <Animation Duration="0:0:1.1" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="4"/>
+                <Setter Property="Height" Value="4"/>
+                <Setter Property="(Canvas.Top)" Value="388"/>
+              </KeyFrame>
+              <KeyFrame Cue="30%">
+                <Setter Property="Opacity" Value="1"/>
+                <Setter Property="Width" Value="7"/>
+                <Setter Property="Height" Value="7"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Height" Value="2"/>
+                <Setter Property="(Canvas.Top)" Value="55"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark7"
+             Width="11" Height="11"
+             Fill="#FF4444"
+             Opacity="0"
+             Canvas.Left="380" Canvas.Top="392">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="24" Color="#FF4444" Opacity="0.92"/>
+      </Ellipse.Effect>
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark7">
+          <Style.Animations>
+            <Animation Duration="0:0:1.6" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="7"/>
+                <Setter Property="Height" Value="7"/>
+                <Setter Property="(Canvas.Top)" Value="392"/>
+              </KeyFrame>
+              <KeyFrame Cue="18%">
+                <Setter Property="Opacity" Value="0.98"/>
+                <Setter Property="Width" Value="11"/>
+                <Setter Property="Height" Value="11"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="3"/>
+                <Setter Property="Height" Value="3"/>
+                <Setter Property="(Canvas.Top)" Value="30"/>
+              </KeyFrame>
+            </Animation>
+          </Style.Animations>
+        </Style>
+      </Ellipse.Styles>
+    </Ellipse>
+
+    <Ellipse x:Name="Spark8"
+             Width="9" Height="9"
+             Fill="#FFD700"
+             Opacity="0"
+             Canvas.Left="400" Canvas.Top="383">
+      <Ellipse.Effect>
+        <DropShadowEffect BlurRadius="19" Color="#FFD700" Opacity="0.88"/>
+      </Ellipse.Effect>
+      <Ellipse.Styles>
+        <Style Selector="Ellipse#Spark8">
+          <Style.Animations>
+            <Animation Duration="0:0:1.35" IterationCount="Infinite">
+              <KeyFrame Cue="0%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="5"/>
+                <Setter Property="Height" Value="5"/>
+                <Setter Property="(Canvas.Left)" Value="400"/>
+                <Setter Property="(Canvas.Top)" Value="383"/>
+              </KeyFrame>
+              <KeyFrame Cue="22%">
+                <Setter Property="Opacity" Value="0.93"/>
+                <Setter Property="Width" Value="9"/>
+                <Setter Property="Height" Value="9"/>
+              </KeyFrame>
+              <KeyFrame Cue="100%">
+                <Setter Property="Opacity" Value="0"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Height" Value="2"/>
+                <Setter Property="(Canvas.Left)" Value="340"/>
+                <Setter Property="(Canvas.Top)" Value="45"/>
               </KeyFrame>
             </Animation>
           </Style.Animations>
