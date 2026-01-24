@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace CF_01.Views
 {
@@ -7,6 +8,12 @@ namespace CF_01.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        // Code-behind
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MyThermometer.SetTemperature(30);
         }
     }
 }

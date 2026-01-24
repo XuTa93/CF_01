@@ -1,4 +1,4 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:CF_01.ViewModels"
         xmlns:views="using:CF_01.Views"
@@ -16,6 +16,13 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-<views:Fire></views:Fire>
 
+      <StackPanel Orientation="Horizontal" >
+          <views:Fire></views:Fire>
+    <!-- Thermometer độc lập -->
+    <views:Thermometer x:Name="MyThermometer"/>
+    
+    <Button Content="Set 30°C" 
+            Click="Button_Click"/>
+  </StackPanel>
 </Window>
