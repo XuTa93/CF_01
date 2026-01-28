@@ -10,7 +10,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
     private readonly Random _random = new();
 
     [ObservableProperty]
-    private double _temperature = 25.0;
+    private double _temperature = 10.0;
 
     [ObservableProperty]
     private bool _isLowTemperature = false;
@@ -32,7 +32,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
         // Tạo timer thay đổi nhiệt độ mỗi 2 giây
         _timer = new DispatcherTimer
         {
-            Interval = TimeSpan.FromSeconds(2)
+            Interval = TimeSpan.FromSeconds(0.5)
         };
         _timer.Tick += OnTimerTick;
         _timer.Start();
@@ -41,7 +41,11 @@ public partial class FireViewModel : ObservableObject, IDisposable
     private void OnTimerTick(object? sender, EventArgs e)
     {
         // Thay đổi nhiệt độ ngẫu nhiên từ 10°C đến 45°C
-        Temperature = _random.Next(10, 46);
+        Temperature = Temperature + 10;
+        if (Temperature > 40)
+        {
+            Temperature = 10;
+        }
     }
 
     partial void OnTemperatureChanged(double value)

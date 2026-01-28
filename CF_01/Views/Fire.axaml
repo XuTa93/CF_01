@@ -4,40 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:gif="clr-namespace:Avalonia.Labs.Gif;assembly=Avalonia.Labs.Gif"
              xmlns:vm="using:CF_01.ViewModels"
-                 xmlns:views="using:CF_01.Views"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:views="using:CF_01.Views"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="500"
              x:Class="CF_01.Views.Fire"
              x:DataType="vm:FireViewModel">
-  <Canvas Width="800" Height="450" Background="#0d0d0f">
+  
+  <!-- Viewbox giúp scale tự động theo kích thước container -->
+  <Viewbox Stretch="Uniform">
+      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+          <Grid HorizontalAlignment="Center" Width="600" Height="600">
 
-    <!-- 3 GIF CANH GIỮA -->
-    <gif:GifImage x:Name="FireLowGif"
-                  Source="avares://CF_01/Assets/FireL.gif" 
-                  Width="600" Height="400"
-                  Canvas.Left="100" Canvas.Top="25"
-                  StretchDirection="Both"
-                  Stretch="UniformToFill"
-                  IsVisible="{Binding IsLowTemperature}"/>
+      <!-- 3 GIF CANH GIỮA -->
+      <gif:GifImage x:Name="FireLowGif"
+                    Source="avares://CF_01/Assets/FireL.gif"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center"
+                    StretchDirection="Both"
+                    Stretch="UniformToFill"
+                    IsVisible="{Binding IsLowTemperature}"/>
 
-    <gif:GifImage x:Name="FireNormalGif"
-                  Source="avares://CF_01/Assets/Fire.gif" 
-                  Width="650" Height="400"
-                  Canvas.Left="75" Canvas.Top="25"
-                  StretchDirection="Both"
-                  Stretch="UniformToFill"
-                  IsVisible="{Binding IsNormalTemperature}"/>
+      <gif:GifImage x:Name="FireNormalGif"
+                    Source="avares://CF_01/Assets/Fire.gif"
+                    Width="550" Height="550"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center"
+                    StretchDirection="Both"
+                    Stretch="UniformToFill"
+                    IsVisible="{Binding IsNormalTemperature}"/>
 
-    <gif:GifImage x:Name="FireHighGif"
-                  Source="avares://CF_01/Assets/FireH.gif" 
-                  Width="650" Height="450"
-                  Canvas.Left="75" Canvas.Top="0"
-                  StretchDirection="Both"
-                  Stretch="UniformToFill"
-                  IsVisible="{Binding IsHighTemperature}"/>
-
-    <!-- THERMOMETER UserControl - Dùng lại được! -->
-    <views:Thermometer x:Name="ThermometerControl"
-                       Canvas.Left="620" Canvas.Top="60"/>
-
-  </Canvas>
+      <gif:GifImage x:Name="FireHighGif"
+                    Height="680" Width="800"
+                    Source="avares://CF_01/Assets/FireH.gif"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    StretchDirection="Both"
+                    Stretch="UniformToFill"
+                    IsVisible="{Binding IsHighTemperature}"/>
+    </Grid>
+                <!-- THERMOMETER UserControl - Dùng lại được! -->
+      <views:Thermometer x:Name="ThermometerControl"/>
+      </StackPanel>
+    
+  </Viewbox>
 </UserControl>
