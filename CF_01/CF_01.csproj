@@ -25,5 +25,8 @@
     </PackageReference>
     <PackageReference Include="Avalonia_Gif" Version="1.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Irihi.Ursa" Version="1.14.1" />
+    <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.14.1" />
+    <PackageReference Include="Semi.Avalonia" Version="11.3.7.2" />
   </ItemGroup>
 </Project>
