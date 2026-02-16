@@ -58,14 +58,14 @@ public partial class Thermometer : UserControl
             {
                 tickWidth = 15;
                 tickHeight = 1.5;
-                tickColor = Color.Parse("#AAAAAA");
+                tickColor = Color.Parse("#CCCCCC");
             }
             else
             {
                 // Minor tick every 1°C
                 tickWidth = 8;
                 tickHeight = 1;
-                tickColor = Color.Parse("#666666");
+                tickColor = Color.Parse("#999999");
             }
 
             // Draw tick line
@@ -102,15 +102,15 @@ public partial class Thermometer : UserControl
 
     private static Color GetTickColor(int temp) => temp switch
     {
-        >= 100 => Color.Parse("#FF0000"),
-        >= 90  => Color.Parse("#FF2222"),
-        >= 80  => Color.Parse("#FF4444"),
-        >= 70  => Color.Parse("#FF6644"),
-        >= 60  => Color.Parse("#FF8844"),
-        >= 50  => Color.Parse("#FFAA44"),
-        >= 40  => Color.Parse("#FFCC44"),
-        >= 30  => Color.Parse("#FFEE44"),
-        >= 20  => Color.Parse("#CCFF44"),
-        _      => Color.Parse("#4488FF")
+        >= 100 => Color.Parse("#FF4444"),
+        >= 90  => Color.Parse("#FF5544"),
+        >= 80  => Color.Parse("#FF6655"),
+        >= 70  => Color.Parse("#FF8866"),
+        >= 60  => Color.Parse("#FFAA66"),
+        >= 50  => Color.Parse("#FFCC66"),
+        >= 40  => Color.Parse("#FFDD66"),
+        >= 30  => Color.Parse("#FFEE77"),
+        >= 20  => Color.Parse("#BBFF66"),
+        _      => Color.Parse("#66AAFF")
     };
 }

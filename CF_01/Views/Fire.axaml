@@ -1,4 +1,4 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+﻿    <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -33,13 +33,58 @@
                     IsVisible="{Binding IsNormalTemperature}"/>
 
       <gif:GifImage x:Name="FireHighGif"
-                    Height="680" Width="800"
-                    Source="avares://CF_01/Assets/FireH.gif"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    StretchDirection="Both"
-                    Stretch="UniformToFill"
-                    IsVisible="{Binding IsHighTemperature}"/>
+                     Height="680" Width="800"
+                     Source="avares://CF_01/Assets/FireH.gif"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Center"
+                     StretchDirection="Both"
+                     Stretch="UniformToFill"
+                     IsVisible="{Binding IsHighTemperature}"/>
+
+      <!-- Fire temperature text effect - 3 layers -->
+      <Panel HorizontalAlignment="Center"
+             VerticalAlignment="Top"
+             Margin="0,30,0,0">
+
+        <!-- Layer 1: Outer glow (red/orange halo) -->
+        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                   FontSize="180"
+                   FontWeight="ExtraBold"
+                   Foreground="Transparent"
+                   HorizontalAlignment="Center">
+          <TextBlock.Effect>
+            <DropShadowEffect Color="{Binding FireOuterGlowColor}"
+                              BlurRadius="{Binding FireOuterGlowRadius}"
+                              Opacity="{Binding FireGlowOpacity}"
+                              OffsetX="0" OffsetY="0"/>
+          </TextBlock.Effect>
+        </TextBlock>
+
+        <!-- Layer 2: Inner glow (yellow/orange closer glow) -->
+        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                   FontSize="180"
+                   FontWeight="ExtraBold"
+                   Foreground="Transparent"
+                   HorizontalAlignment="Center">
+          <TextBlock.Effect>
+            <DropShadowEffect Color="{Binding FireInnerGlowColor}"
+                              BlurRadius="{Binding FireInnerGlowRadius}"
+                              Opacity="{Binding FireGlowOpacity}"
+                              OffsetX="0" OffsetY="0"/>
+          </TextBlock.Effect>
+        </TextBlock>
+
+        <!-- Layer 3: Main text with fire gradient foreground -->
+        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                   FontSize="180"
+                   FontWeight="ExtraBold"
+                   Foreground="{Binding FireTextBrush}"
+                   HorizontalAlignment="Center">
+          <TextBlock.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="3" Opacity="0.6" OffsetX="0" OffsetY="2"/>
+          </TextBlock.Effect>
+        </TextBlock>
+      </Panel>
     </Grid>
                 <!-- THERMOMETER UserControl - Dùng lại được! -->
       <views:Thermometer x:Name="ThermometerControl"/>

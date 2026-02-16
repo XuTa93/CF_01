@@ -27,11 +27,11 @@
                   Width="54"
                   Height="620"
                   CornerRadius="27"
-                  Background="#22888888"
-                  BorderBrush="#44AAAAAA"
+                  Background="#33999999"
+                  BorderBrush="#66BBBBBB"
                   BorderThickness="1.5">
             <Border.Effect>
-              <DropShadowEffect BlurRadius="6" Opacity="0.15" OffsetX="2" OffsetY="2"/>
+              <DropShadowEffect BlurRadius="8" Opacity="0.25" OffsetX="2" OffsetY="2"/>
             </Border.Effect>
           </Border>
 
@@ -41,7 +41,7 @@
                   Width="12"
                   Height="600"
                   CornerRadius="6"
-                  Opacity="0.25">
+                  Opacity="0.35">
             <Border.Background>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                 <GradientStop Color="White" Offset="0"/>
@@ -58,13 +58,15 @@
                   CornerRadius="23,23,8,8">
             <Border.Background>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                <GradientStop Color="#44FFFFFF" Offset="0"/>
-                <GradientStop Offset="0.5" Color="{Binding MercuryColor}"/>
-                <GradientStop Color="#22000000" Offset="1"/>
+                <GradientStop Offset="0" Color="{Binding MercuryColor}"/>
+                <GradientStop Offset="0.45" Color="{Binding MercuryColor}"/>
+                <GradientStop Color="#88FFFFFF" Offset="0.55"/>
+                <GradientStop Offset="0.75" Color="{Binding MercuryColor}"/>
+                <GradientStop Offset="1" Color="{Binding MercuryColor}"/>
               </LinearGradientBrush>
             </Border.Background>
             <Border.Effect>
-              <DropShadowEffect BlurRadius="12" Opacity="0.6" OffsetX="0" OffsetY="0"/>
+              <DropShadowEffect BlurRadius="14" Opacity="0.7" OffsetX="0" OffsetY="0" Color="{Binding MercuryColor}"/>
             </Border.Effect>
           </Border>
 
@@ -74,26 +76,28 @@
                    Width="60"
                    Height="60">
             <Ellipse.Fill>
-              <RadialGradientBrush Center="0.35,0.35" GradientOrigin="0.35,0.35">
-                <GradientStop Color="#66FFFFFF" Offset="0"/>
-                <GradientStop Offset="0.6" Color="{Binding MercuryColor}"/>
-                <GradientStop Color="#44000000" Offset="1"/>
+              <RadialGradientBrush Center="0.4,0.4" GradientOrigin="0.3,0.3">
+                <GradientStop Color="#AAFFFFFF" Offset="0"/>
+                <GradientStop Offset="0.5" Color="{Binding MercuryColor}"/>
+                <GradientStop Offset="0.85" Color="{Binding MercuryColor}"/>
+                <GradientStop Color="#66000000" Offset="1"/>
               </RadialGradientBrush>
             </Ellipse.Fill>
             <Ellipse.Effect>
-              <DropShadowEffect BlurRadius="15" Opacity="0.5" OffsetX="0" OffsetY="3"/>
+              <DropShadowEffect BlurRadius="18" Opacity="0.65" OffsetX="0" OffsetY="3" Color="{Binding MercuryColor}"/>
             </Ellipse.Effect>
           </Ellipse>
 
           <!-- Bulb glass highlight -->
           <Ellipse Canvas.Left="14"
                    Canvas.Bottom="18"
-                   Width="18"
-                   Height="18"
-                   Opacity="0.4">
+                   Width="20"
+                   Height="20"
+                   Opacity="0.55">
             <Ellipse.Fill>
               <RadialGradientBrush>
                 <GradientStop Color="White" Offset="0"/>
+                <GradientStop Color="#44FFFFFF" Offset="0.4"/>
                 <GradientStop Color="Transparent" Offset="1"/>
               </RadialGradientBrush>
             </Ellipse.Fill>
@@ -120,7 +124,7 @@
         <rs:RangeSlider Minimum="20"
                         Maximum="120"
                         Grid.Column="1"
-                        Margin="2"
+                        Margin="2 15 2 45"
                         ThumbFlyoutPlacement="TopLeft"
                         LowerSelectedValue="{Binding LowerTemperature}"
                         UpperSelectedValue="{Binding UpperTemperature}"

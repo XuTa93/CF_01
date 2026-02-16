@@ -13,7 +13,7 @@ namespace CF_01.Views
         // Code-behind
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MyThermometer.SetTemperature(30);
+            //MyThermometer.SetTemperature(30);
         }
     }
 }

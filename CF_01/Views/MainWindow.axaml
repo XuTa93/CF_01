@@ -20,9 +20,9 @@
       <StackPanel Orientation="Horizontal" >
           <views:Fire></views:Fire>
     <!-- Thermometer độc lập -->
-    <views:Thermometer x:Name="MyThermometer"/>
+<!--    <views:Thermometer x:Name="MyThermometer"/>
     
     <Button Content="Set 30°C" 
-            Click="Button_Click"/>
+            Click="Button_Click"/>-->
   </StackPanel>
 </Window>

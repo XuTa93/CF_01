@@ -47,17 +47,17 @@ public partial class ThermometerViewModel : ObservableObject
 
         Color color;
         if (Temperature < LowTempThreshold)
-            color = Color.FromRgb(68, 136, 255);
+            color = Color.FromRgb(80, 160, 255);
         else if (Temperature < 40)
-            color = Color.FromRgb(100, 210, 160);
+            color = Color.FromRgb(50, 220, 140);
         else if (Temperature < 60)
-            color = Color.FromRgb(255, 200, 50);
+            color = Color.FromRgb(255, 220, 60);
         else if (Temperature < HighTempThreshold)
-            color = Color.FromRgb(255, 140, 50);
+            color = Color.FromRgb(255, 160, 40);
         else if (Temperature < 100)
-            color = Color.FromRgb(255, 80, 50);
+            color = Color.FromRgb(255, 80, 40);
         else
-            color = Color.FromRgb(230, 30, 30);
+            color = Color.FromRgb(240, 40, 40);
 
         MercuryColor = color;
         MercuryBrush = new SolidColorBrush(color);
