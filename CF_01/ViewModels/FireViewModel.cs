@@ -8,7 +8,6 @@ namespace CF_01.ViewModels;
 public partial class FireViewModel : ObservableObject, IDisposable
 {
     private readonly DispatcherTimer _timer;
-    private readonly Random _random = new();
 
     [ObservableProperty]
     private double _temperature = 10.0;
@@ -41,20 +40,32 @@ public partial class FireViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private double _fireGlowOpacity = 0;
 
-    // Ngưỡng nhiệt độ
-    private const double LowTempThreshold = 70.0;
-    private const double HighTempThreshold = 100.0;
+    // Ngưỡng nhiệt độ (sync từ RangeSlider)
+    [ObservableProperty]
+    private double _lowTempThreshold = 70.0;
+
+    [ObservableProperty]
+    private double _highTempThreshold = 100.0;
 
     // Dải nhiệt cho hiệu ứng lửa text
     private const double FireMinTemp = 20.0;
     private const double FireMaxTemp = 120.0;
 
+    // Reuse brush để giảm GC pressure
+    private readonly LinearGradientBrush _reusableTextBrush;
+
     public FireViewModel()
     {
+        _reusableTextBrush = new LinearGradientBrush
+        {
+            StartPoint = new Avalonia.RelativePoint(0.5, 0, Avalonia.RelativeUnit.Relative),
+            EndPoint = new Avalonia.RelativePoint(0.5, 1, Avalonia.RelativeUnit.Relative),
+            GradientStops = { new GradientStop(), new GradientStop(), new GradientStop() }
+        };
+
         UpdateFireDisplay();
         UpdateFireTextEffect();
 
-        // Tạo timer thay đổi nhiệt độ mỗi 0.1 giây
         _timer = new DispatcherTimer
         {
             Interval = TimeSpan.FromSeconds(0.1)
@@ -65,8 +76,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
 
     private void OnTimerTick(object? sender, EventArgs e)
     {
-        // Thay đổi nhiệt độ ngẫu nhiên từ 10°C đến 45°C
-        Temperature = Temperature + 1;
+        Temperature += 1;
         if (Temperature > 110)
         {
             Temperature = 10;
@@ -79,15 +89,32 @@ public partial class FireViewModel : ObservableObject, IDisposable
         UpdateFireTextEffect();
     }
 
+    partial void OnLowTempThresholdChanged(double value)
+    {
+        UpdateFireDisplay();
+    }
+
+    partial void OnHighTempThresholdChanged(double value)
+    {
+        UpdateFireDisplay();
+    }
+
     private void UpdateFireDisplay()
     {
-        if (Temperature < LowTempThreshold)
+        if (Temperature < 30)
+        {
+            // Dưới 30°C: không hiển thị lửa
+            IsLowTemperature = false;
+            IsNormalTemperature = false;
+            IsHighTemperature = false;
+        }
+        else if (Temperature < LowTempThreshold)
         {
             IsLowTemperature = true;
             IsNormalTemperature = false;
             IsHighTemperature = false;
         }
-        else if (Temperature >= LowTempThreshold && Temperature < HighTempThreshold)
+        else if (Temperature < HighTempThreshold)
         {
             IsLowTemperature = false;
             IsNormalTemperature = true;
@@ -133,17 +160,10 @@ public partial class FireViewModel : ObservableObject, IDisposable
         var topColor = LerpColor(textColor, Color.FromRgb(255, 60, 10), Math.Min(t * 0.7, 0.55));
         var bottomColor = LerpColor(textColor, Color.FromRgb(255, 255, 240), 0.25);
 
-        FireTextBrush = new LinearGradientBrush
-        {
-            StartPoint = new Avalonia.RelativePoint(0.5, 0, Avalonia.RelativeUnit.Relative),
-            EndPoint = new Avalonia.RelativePoint(0.5, 1, Avalonia.RelativeUnit.Relative),
-            GradientStops =
-            {
-                new GradientStop(topColor, 0),
-                new GradientStop(textColor, 0.45),
-                new GradientStop(bottomColor, 1.0)
-            }
-        };
+        _reusableTextBrush.GradientStops[0] = new GradientStop(topColor, 0);
+        _reusableTextBrush.GradientStops[1] = new GradientStop(textColor, 0.45);
+        _reusableTextBrush.GradientStops[2] = new GradientStop(bottomColor, 1.0);
+        FireTextBrush = _reusableTextBrush;
 
         // === Inner glow: yellow → orange, grows with temperature ===
         FireInnerGlowColor = LerpColor(
@@ -174,6 +194,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
 
     public void Dispose()
     {
-        _timer?.Stop();
+        _timer.Tick -= OnTimerTick;
+        _timer.Stop();
     }
 }

@@ -24,20 +24,61 @@ public partial class ThermometerViewModel : ObservableObject
     [ObservableProperty]
     private Color _mercuryColor = Color.FromRgb(255, 204, 68);
 
-    private const double MinTemp = 20.0;
+    // Vị trí Y của label Lower/Upper (tính từ top Canvas)
+    [ObservableProperty]
+    private double _lowerLabelY = 0;
+
+    [ObservableProperty]
+    private double _upperLabelY = 0;
+
+    private const double MinTemp = 30.0;
     private const double MaxTemp = 120.0;
-    private const double ColumnHeight = 590.0; // usable height for mercury column (above bulb)
-    private const double LowTempThreshold = 20.0;
+    private const double ColumnHeight = 590.0;
+    private const double LowTempThreshold = 30.0;
     private const double HighTempThreshold = 80.0;
+
+    // Layout constants
+    private const double TopPadding = 15.0;
+    private const double UsableHeight = 590.0;
+
+    // Slider thumb offset — thumb center không chạm biên slider,
+    // bị co vào bởi nửa chiều cao thumb ở mỗi đầu
+    private const double SliderTopMargin = 15.0;
+    private const double SliderBottomMargin = 45.0;
+    private const double CanvasHeight = 650.0;
+    private const double ThumbHalf = 10.0;
+    private const double TrackTop = SliderTopMargin + ThumbHalf;
+    private const double TrackBottom = CanvasHeight - SliderBottomMargin - ThumbHalf;
+    private const double TrackRange = TrackBottom - TrackTop;
 
     public ThermometerViewModel()
     {
         UpdateThermometer();
+        UpdateLabelPositions();
     }
 
     partial void OnTemperatureChanged(double value)
     {
         UpdateThermometer();
+    }
+
+    partial void OnLowerTemperatureChanged(double value)
+    {
+        UpdateLabelPositions();
+    }
+
+    partial void OnUpperTemperatureChanged(double value)
+    {
+        UpdateLabelPositions();
+    }
+
+    private void UpdateLabelPositions()
+    {
+        double lowerPct = Math.Clamp((LowerTemperature - MinTemp) / (MaxTemp - MinTemp), 0, 1);
+        LowerLabelY = TrackTop + (1 - lowerPct) * TrackRange - 10;
+
+        double upperPct = Math.Clamp((UpperTemperature - MinTemp) / (MaxTemp - MinTemp), 0, 1);
+        UpperLabelY = TrackTop + (1 - upperPct) * TrackRange - 10;
     }
 
     private void UpdateThermometer()

@@ -28,7 +28,7 @@ public partial class Thermometer : UserControl
 
     private void DrawTickMarks()
     {
-        const double minTemp = 20.0;
+        const double minTemp = 30.0;
         const double maxTemp = 120.0;
         const double canvasHeight = 620.0;
         const double topPadding = 15.0;

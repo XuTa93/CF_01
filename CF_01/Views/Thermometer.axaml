@@ -15,6 +15,7 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="110"/>
           <ColumnDefinition Width="40"/>
+          <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
         <Canvas Grid.Column="0" Width="115" Height="650"
@@ -121,7 +122,7 @@
           <Canvas x:Name="TickCanvas" Width="115" Height="650"/>
         </Canvas>
 
-        <rs:RangeSlider Minimum="20"
+        <rs:RangeSlider Minimum="30"
                         Maximum="120"
                         Grid.Column="1"
                         Margin="2 15 2 45"
@@ -130,6 +131,33 @@
                         UpperSelectedValue="{Binding UpperTemperature}"
                         Orientation="Vertical"
                         IsThumbOverlap="True"/>
+
+        <!-- Labels hiển thị giá trị Lower/Upper tại vị trí tương ứng -->
+        <Canvas Grid.Column="2" Width="55" Height="650">
+          <!-- Upper value label -->
+          <Border Canvas.Top="{Binding UpperLabelY}"
+                  Canvas.Left="0"
+                  Background="#CC2196F3"
+                  CornerRadius="4"
+                  Padding="4,2">
+            <TextBlock Text="{Binding UpperTemperature, StringFormat='{}{0:F0}°'}"
+                       FontSize="13"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+          </Border>
+
+          <!-- Lower value label -->
+          <Border Canvas.Top="{Binding LowerLabelY}"
+                  Canvas.Left="0"
+                  Background="#CCFF9800"
+                  CornerRadius="4"
+                  Padding="4,2">
+            <TextBlock Text="{Binding LowerTemperature, StringFormat='{}{0:F0}°'}"
+                       FontSize="13"
+                       FontWeight="Bold"
+                       Foreground="White"/>
+          </Border>
+        </Canvas>
       </Grid>
   </Viewbox>
 </UserControl>

@@ -1,27 +1,50 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-using Avalonia.VisualTree; // <-- Add this using directive
 using CF_01.ViewModels;
+using System.ComponentModel;
 
 namespace CF_01.Views;
 
 public partial class Fire : UserControl
 {
+    private FireViewModel? _fireViewModel;
+    private ThermometerViewModel? _thermoVm;
+    private PropertyChangedEventHandler? _firePropertyHandler;
+    private PropertyChangedEventHandler? _thermoPropertyHandler;
+
     public Fire()
     {
         InitializeComponent();
-        var fireViewModel = new FireViewModel();
-        DataContext = fireViewModel;
+        _fireViewModel = new FireViewModel();
+        DataContext = _fireViewModel;
+
+        _thermoVm = ThermometerControl.ViewModel;
 
         // Sync nhiệt độ từ FireViewModel sang ThermometerControl
-        fireViewModel.PropertyChanged += (s, e) =>
+        _firePropertyHandler = (s, e) =>
         {
             if (e.PropertyName == nameof(FireViewModel.Temperature))
             {
-                ThermometerControl.SetTemperature(fireViewModel.Temperature);
+                ThermometerControl.SetTemperature(_fireViewModel.Temperature);
             }
         };
+        _fireViewModel.PropertyChanged += _firePropertyHandler;
+
+        // Sync ngưỡng từ RangeSlider (ThermometerViewModel) sang FireViewModel
+        if (_thermoVm != null)
+        {
+            _fireViewModel.LowTempThreshold = _thermoVm.LowerTemperature;
+            _fireViewModel.HighTempThreshold = _thermoVm.UpperTemperature;
+
+            _thermoPropertyHandler = (s, e) =>
+            {
+                if (e.PropertyName == nameof(ThermometerViewModel.LowerTemperature))
+                    _fireViewModel.LowTempThreshold = _thermoVm.LowerTemperature;
+                else if (e.PropertyName == nameof(ThermometerViewModel.UpperTemperature))
+                    _fireViewModel.HighTempThreshold = _thermoVm.UpperTemperature;
+            };
+            _thermoVm.PropertyChanged += _thermoPropertyHandler;
+        }
     }
 
     // Property để access ViewModel từ bên ngoài
@@ -29,7 +52,15 @@ public partial class Fire : UserControl
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
+        // Unsubscribe tất cả event handlers để tránh memory leak
+        if (_fireViewModel != null && _firePropertyHandler != null)
+            _fireViewModel.PropertyChanged -= _firePropertyHandler;
+
+        if (_thermoVm != null && _thermoPropertyHandler != null)
+            _thermoVm.PropertyChanged -= _thermoPropertyHandler;
+
+        _fireViewModel?.Dispose();
+
         base.OnDetachedFromVisualTree(e);
-        (DataContext as FireViewModel)?.Dispose();
     }
 }
