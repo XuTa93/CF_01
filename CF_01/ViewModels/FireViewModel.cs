@@ -361,6 +361,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
                         {
                             MinuteAverages.Add(new MinuteAverageEntry(
                                 _minuteIndex,
+                                SimulatedTimeText,
                                 _minuteTempSum / _minuteSampleCount,
                                 _minuteMin,
                                 _minuteMax,
@@ -413,6 +414,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
         {
             MinuteAverages.Add(new MinuteAverageEntry(
                 _minuteIndex,
+                SimulatedTimeText,
                 _minuteTempSum / _minuteSampleCount,
                 _minuteMin,
                 _minuteMax,
