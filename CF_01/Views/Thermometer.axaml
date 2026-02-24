@@ -56,7 +56,7 @@
                   Canvas.Bottom="35"
                   Width="46"
                   Height="{Binding MercuryHeight}"
-                  CornerRadius="23,23,8,8">
+                  CornerRadius="{Binding MercuryCornerRadius}">
             <Border.Background>
               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                 <GradientStop Offset="0" Color="{Binding MercuryColor}"/>

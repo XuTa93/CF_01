@@ -24,6 +24,9 @@ public partial class ThermometerViewModel : ObservableObject
     [ObservableProperty]
     private Color _mercuryColor = Color.FromRgb(255, 204, 68);
 
+    [ObservableProperty]
+    private Avalonia.CornerRadius _mercuryCornerRadius = new(0, 0, 8, 8);
+
     // Vị trí Y của label Lower/Upper (tính từ top Canvas)
     [ObservableProperty]
     private double _lowerLabelY = 0;
@@ -85,6 +88,12 @@ public partial class ThermometerViewModel : ObservableObject
     {
         var percentage = Math.Clamp((Temperature - MinTemp) / (MaxTemp - MinTemp), 0, 1);
         MercuryHeight = Math.Max(10, percentage * ColumnHeight);
+
+        // Bo tròn đầu ống chỉ khi gần đầy (>90%)
+        double topRadius = percentage > 0.9
+            ? 23.0 * ((percentage - 0.9) / 0.1)
+            : 0;
+        MercuryCornerRadius = new Avalonia.CornerRadius(topRadius, topRadius, 8, 8);
 
         Color color;
         if (Temperature < LowTempThreshold)

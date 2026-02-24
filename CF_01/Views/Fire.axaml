@@ -9,86 +9,208 @@
              x:Class="CF_01.Views.Fire"
              x:DataType="vm:FireViewModel">
   
-  <!-- Viewbox giúp scale tự động theo kích thước container -->
-  <Viewbox Stretch="Uniform">
-      <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-          <Grid HorizontalAlignment="Center" Width="600" Height="600">
+  <!-- Grid tách Fire và Thermometer để scale độc lập -->
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
 
-      <!-- 3 GIF CANH GIỮA -->
-      <gif:GifImage x:Name="FireLowGif"
-                    Source="avares://CF_01/Assets/FireL.gif"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center"
-                    StretchDirection="Both"
-                    Stretch="UniformToFill"
-                    IsVisible="{Binding IsLowTemperature}"/>
+    <!-- Fire area với overlay stats -->
+    <Grid Grid.Column="0">
 
-      <gif:GifImage x:Name="FireNormalGif"
-                    Source="avares://CF_01/Assets/Fire.gif"
-                    Width="550" Height="550"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center"
-                    StretchDirection="Both"
-                    Stretch="UniformToFill"
-                    IsVisible="{Binding IsNormalTemperature}"/>
+      <!-- Fire GIFs scale uniform trong Viewbox riêng -->
+      <Viewbox Stretch="Uniform">
+        <Grid HorizontalAlignment="Center" Width="600" Height="600">
 
-      <gif:GifImage x:Name="FireHighGif"
-                     Height="680" Width="800"
-                     Source="avares://CF_01/Assets/FireH.gif"
-                     VerticalAlignment="Center"
-                     HorizontalAlignment="Center"
-                     StretchDirection="Both"
-                     Stretch="UniformToFill"
-                     IsVisible="{Binding IsHighTemperature}"/>
+        <!-- 3 GIF CANH GIỮA -->
+        <gif:GifImage x:Name="FireLowGif"
+                      Source="avares://CF_01/Assets/FireL.gif"
+                      VerticalAlignment="Bottom"
+                      HorizontalAlignment="Center"
+                      StretchDirection="Both"
+                      Stretch="UniformToFill"
+                      IsVisible="{Binding IsLowTemperature}"/>
 
-      <!-- Fire temperature text effect - 3 layers -->
-      <Panel HorizontalAlignment="Center"
-             VerticalAlignment="Top"
-             Margin="0,30,0,0">
+        <gif:GifImage x:Name="FireNormalGif"
+                      Source="avares://CF_01/Assets/Fire.gif"
+                      Width="550" Height="550"
+                      VerticalAlignment="Bottom"
+                      HorizontalAlignment="Center"
+                      StretchDirection="Both"
+                      Stretch="UniformToFill"
+                      IsVisible="{Binding IsNormalTemperature}"/>
 
-        <!-- Layer 1: Outer glow (red/orange halo) -->
-        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
-                   FontSize="180"
-                   FontWeight="ExtraBold"
-                   Foreground="Transparent"
-                   HorizontalAlignment="Center">
-          <TextBlock.Effect>
-            <DropShadowEffect Color="{Binding FireOuterGlowColor}"
-                              BlurRadius="{Binding FireOuterGlowRadius}"
-                              Opacity="{Binding FireGlowOpacity}"
-                              OffsetX="0" OffsetY="0"/>
-          </TextBlock.Effect>
-        </TextBlock>
+        <gif:GifImage x:Name="FireHighGif"
+                       Height="680" Width="800"
+                       Source="avares://CF_01/Assets/FireH.gif"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       StretchDirection="Both"
+                       Stretch="UniformToFill"
+                       IsVisible="{Binding IsHighTemperature}"/>
 
-        <!-- Layer 2: Inner glow (yellow/orange closer glow) -->
-        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
-                   FontSize="180"
-                   FontWeight="ExtraBold"
-                   Foreground="Transparent"
-                   HorizontalAlignment="Center">
-          <TextBlock.Effect>
-            <DropShadowEffect Color="{Binding FireInnerGlowColor}"
-                              BlurRadius="{Binding FireInnerGlowRadius}"
-                              Opacity="{Binding FireGlowOpacity}"
-                              OffsetX="0" OffsetY="0"/>
-          </TextBlock.Effect>
-        </TextBlock>
+        <!-- Fire temperature text effect - 3 layers -->
+        <Panel HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               Margin="0,50,0,0">
 
-        <!-- Layer 3: Main text with fire gradient foreground -->
-        <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
-                   FontSize="180"
-                   FontWeight="ExtraBold"
-                   Foreground="{Binding FireTextBrush}"
-                   HorizontalAlignment="Center">
-          <TextBlock.Effect>
-            <DropShadowEffect Color="Black" BlurRadius="3" Opacity="0.6" OffsetX="0" OffsetY="2"/>
-          </TextBlock.Effect>
-        </TextBlock>
-      </Panel>
-    </Grid>
-                <!-- THERMOMETER UserControl - Dùng lại được! -->
-      <views:Thermometer x:Name="ThermometerControl"/>
+          <!-- Layer 1: Outer glow (red/orange halo) -->
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                     FontSize="180"
+                     FontWeight="ExtraBold"
+                     Foreground="Transparent"
+                     HorizontalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="{Binding FireOuterGlowColor}"
+                                BlurRadius="{Binding FireOuterGlowRadius}"
+                                Opacity="{Binding FireGlowOpacity}"
+                                OffsetX="0" OffsetY="0"/>
+            </TextBlock.Effect>
+          </TextBlock>
+
+          <!-- Layer 2: Inner glow (yellow/orange closer glow) -->
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                     FontSize="180"
+                     FontWeight="ExtraBold"
+                     Foreground="Transparent"
+                     HorizontalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="{Binding FireInnerGlowColor}"
+                                BlurRadius="{Binding FireInnerGlowRadius}"
+                                Opacity="{Binding FireGlowOpacity}"
+                                OffsetX="0" OffsetY="0"/>
+            </TextBlock.Effect>
+          </TextBlock>
+
+          <!-- Layer 3: Main text with fire gradient foreground -->
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                     FontSize="180"
+                     FontWeight="ExtraBold"
+                     Foreground="{Binding FireTextBrush}"
+                     HorizontalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="Black" BlurRadius="3" Opacity="0.6" OffsetX="0" OffsetY="2"/>
+            </TextBlock.Effect>
+          </TextBlock>
+        </Panel>
+        </Grid>
+      </Viewbox>
+
+      <!-- === OVERLAY BÊN TRÁI: Đồng hồ + Trạng thái === -->
+      <Border HorizontalAlignment="Left" VerticalAlignment="Top"
+              Margin="8,8,0,0"
+              Background="#AA1A1A2E"
+              CornerRadius="8"
+              Padding="10"
+              MaxWidth="180">
+        <StackPanel Spacing="6">
+          <!-- Clock -->
+          <StackPanel Spacing="1" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding SimulatedTimeText}"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       FontFamily="Consolas"
+                       Foreground="White"
+                       HorizontalAlignment="Center">
+              <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="6" Opacity="0.8"/>
+              </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock Text="{Binding SimulatedPeriod}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       Foreground="#DDDDDD"
+                       HorizontalAlignment="Center"/>
+          </StackPanel>
+
+          <Border Height="1" Background="#44AAAAAA"/>
+
+          <!-- Trạng thái -->
+          <TextBlock Text="{Binding SessionStatus}"
+                     FontSize="11"
+                     FontWeight="SemiBold"
+                     Foreground="#EEEEEE"
+                     TextWrapping="Wrap"/>
+
+          <!-- Tổng phiên -->
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <TextBlock Text="Tổng phiên:" FontSize="10" Foreground="#AAAAAA"/>
+            <TextBlock Text="{Binding CompletedSessions}"
+                       FontWeight="Bold" FontSize="12" Foreground="White"/>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- === OVERLAY BÊN PHẢI: Phiên hiện tại + Phiên trước === -->
+      <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top"
+                  Margin="0,8,8,0"
+                  Spacing="6"
+                  MaxWidth="170">
+
+        <!-- Phiên hiện tại -->
+        <Border Background="#AA1A1A2E"
+                CornerRadius="8"
+                Padding="10"
+                IsVisible="{Binding IsSessionActive}">
+          <StackPanel Spacing="4">
+            <TextBlock Text="🔥 PHIÊN HIỆN TẠI" FontSize="10" FontWeight="Bold" Foreground="#FF9800"/>
+
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="2">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="TB" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="0" Grid.Column="1"
+                         Text="{Binding AverageTemperature, StringFormat='{}{0:F1}°C'}"
+                         FontWeight="Bold" FontSize="14" Foreground="#FFCC44"/>
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="1" Grid.Column="1" FontSize="10" Foreground="White"
+                         Text="{Binding SessionSeconds, StringFormat='{}{0:F1}s'}"
+                         FontWeight="SemiBold"/>
+
+              <TextBlock Grid.Row="2" Grid.Column="0" Text="Max" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="2" Grid.Column="1" FontSize="10"
+                         Text="{Binding MaxSessionTemp, StringFormat='{}{0:F1}°C'}"
+                         FontWeight="SemiBold" Foreground="#FF6644"/>
+
+              <TextBlock Grid.Row="3" Grid.Column="0" Text="Min" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="3" Grid.Column="1" FontSize="10"
+                         Text="{Binding MinSessionTemp, StringFormat='{}{0:F1}°C'}"
+                         FontWeight="SemiBold" Foreground="#66AAFF"/>
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Phiên trước -->
+        <Border Background="#AA1A1A2E"
+                CornerRadius="8"
+                Padding="10"
+                IsVisible="{Binding CompletedSessions}">
+          <StackPanel Spacing="4">
+            <TextBlock Text="📋 PHIÊN TRƯỚC" FontSize="10" FontWeight="Bold" Foreground="#2196F3"/>
+
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="2">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="TB" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="0" Grid.Column="1"
+                         Text="{Binding LastAverageTemperature, StringFormat='{}{0:F1}°C'}"
+                         FontWeight="Bold" FontSize="13" Foreground="#44BBFF"/>
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="1" Grid.Column="1" FontSize="10" Foreground="White"
+                         Text="{Binding LastSessionSeconds, StringFormat='{}{0:F1}s'}"
+                         FontWeight="SemiBold"/>
+
+              <TextBlock Grid.Row="2" Grid.Column="0" Text="Mẫu" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="2" Grid.Column="1" FontSize="10" Foreground="White"
+                         Text="{Binding LastSampleCount}" FontWeight="SemiBold"/>
+            </Grid>
+          </StackPanel>
+        </Border>
       </StackPanel>
-    
-  </Viewbox>
+
+    </Grid>
+
+    <!-- Thermometer scale độc lập theo chiều cao container -->
+    <views:Thermometer Grid.Column="1" x:Name="ThermometerControl"
+                       VerticalAlignment="Stretch"/>
+  </Grid>
 </UserControl>

@@ -109,7 +109,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
 
     private const double ActivationThreshold = 70.0;
     private const int StartDelayTicks = 10;  // 1s (0.1s × 10)
-    private const int EndDelayTicks = 20;    // 2s (0.1s × 20)
+    private const int EndDelayTicks = 5;     // 0.5s (0.1s × 5)
     private const int TicksPerMinute = 600;  // 60s / 0.1s
 
     // Per-minute averaging
@@ -167,30 +167,30 @@ public partial class FireViewModel : ObservableObject, IDisposable
 
     /// <summary>
     /// Mô phỏng nhiệt độ lò nung theo chu kỳ 24h:
-    /// 0-1h:   Lò nguội (20-25°C)  → 1 phút thực
-    /// 1-2h:   Khởi động nhanh (25→80°C)
-    /// 2-16h:  Hoạt động chính (78-110°C, dao động)
-    /// 16-18h: Giảm tải (110→65°C)
-    /// 18-22h: Vận hành thấp (55-70°C)
-    /// 22-24h: Tắt lò (65→20°C)
+    /// 0-0.25h:  Lò nguội (20-25°C)  → 15s thực
+    /// 0.25-1h:  Khởi động nhanh (25→80°C)
+    /// 1-16h:    Hoạt động chính (78-110°C, dao động)
+    /// 16-18h:   Giảm tải (110→65°C)
+    /// 18-22h:   Vận hành thấp (55-70°C)
+    /// 22-24h:   Tắt lò (65→20°C)
     /// </summary>
     private double GetTemperatureAtHour(double hour)
     {
         double baseTemp;
         double noiseAmplitude;
 
-        if (hour < 1)
+        if (hour < 0.25)
         {
-            // Lò nguội: 20-25°C, nhiễu nhẹ
+            // Lò nguội: 20-25°C, nhiễu nhẹ (15s thực)
             SimulatedPeriod = "🌙 Lò nguội";
-            baseTemp = 22 + 3 * Math.Sin(hour * Math.PI);
+            baseTemp = 22 + 3 * Math.Sin(hour / 0.25 * Math.PI);
             noiseAmplitude = 2;
         }
-        else if (hour < 2)
+        else if (hour < 1)
         {
             // Khởi động nhanh: tăng từ 25 → 80
             SimulatedPeriod = "🔄 Khởi động";
-            double t = (hour - 1) / 1.0;
+            double t = (hour - 0.25) / 0.75;
             double eased = t * t * (3 - 2 * t);
             baseTemp = 25 + (80 - 25) * eased;
             noiseAmplitude = 3 + t * 4;
@@ -199,7 +199,7 @@ public partial class FireViewModel : ObservableObject, IDisposable
         {
             // Hoạt động chính: 78-110°C, nhiều dao động
             SimulatedPeriod = "🔥 Hoạt động chính";
-            double t = (hour - 2) / 14.0;
+            double t = (hour - 1) / 15.0;
             // Peak ở giữa ca (~12h)
             double peak = Math.Sin(t * Math.PI);
             baseTemp = 78 + 30 * peak;

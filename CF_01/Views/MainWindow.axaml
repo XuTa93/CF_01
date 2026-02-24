@@ -22,11 +22,11 @@
 
       <views:Fire x:Name="FireControl" Grid.Column="0"/>
 
-      <!-- Stats Panel bên phải -->
+      <!-- Per-minute averages Panel -->
       <Border Grid.Column="1"
-              Width="260"
-              Margin="8"
-              Padding="16"
+              Width="160"
+              Margin="0,3,3,3"
+              Padding="5"
               CornerRadius="12"
               Background="#22888888"
               BorderBrush="#44AAAAAA"
@@ -35,182 +35,48 @@
               x:DataType="vm:FireViewModel">
 
         <DockPanel>
+          <TextBlock DockPanel.Dock="Top"
+                     Text="📈 TB THEO PHÚT"
+                     FontSize="12" FontWeight="Bold" Foreground="#4CAF50"
+                     HorizontalAlignment="Center"
+                     Margin="0,0,0,6"/>
 
-          <!-- === TOP: Cố định phía trên === -->
-          <StackPanel DockPanel.Dock="Top" Spacing="12">
-
-            <!-- Header -->
-            <TextBlock Text="📊 Thống kê hoạt động"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,4"/>
-
-            <Separator Background="#44AAAAAA"/>
-
-            <!-- Simulated Clock -->
-            <Border Background="#18FFFFFF"
-                    CornerRadius="8"
-                    Padding="10">
-              <StackPanel Spacing="4" HorizontalAlignment="Center">
-                <TextBlock Text="⏱ Giả lập 24h (24 phút/chu kỳ)"
-                           FontSize="11"
-                           Foreground="#AAAAAA"
-                           HorizontalAlignment="Center"/>
-                <TextBlock Text="{Binding SimulatedTimeText}"
-                           FontSize="32"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           FontFamily="Consolas"/>
-                <TextBlock Text="{Binding SimulatedPeriod}"
-                           FontSize="13"
-                           FontWeight="SemiBold"
-                           HorizontalAlignment="Center"/>
-              </StackPanel>
-            </Border>
-
-            <Separator Background="#44AAAAAA"/>
-
-            <!-- Trạng thái -->
-            <StackPanel Spacing="4">
-              <TextBlock Text="Trạng thái" FontSize="11" Foreground="#AAAAAA"/>
-              <TextBlock Text="{Binding SessionStatus}"
-                         FontSize="15"
-                         FontWeight="SemiBold"/>
-            </StackPanel>
-
-            <!-- Phiên hiện tại -->
-            <Border Background="#18FFFFFF"
-                    CornerRadius="8"
-                    Padding="12"
-                    IsVisible="{Binding IsSessionActive}">
-              <StackPanel Spacing="8">
-                <TextBlock Text="PHIÊN HIỆN TẠI" FontSize="11" FontWeight="Bold" Foreground="#FF9800"/>
-
-                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="6">
-                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Trung bình" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="0" Grid.Column="1"
-                             Text="{Binding AverageTemperature, StringFormat='{}{0:F1}°C'}"
-                             FontWeight="Bold" FontSize="16"
-                             Foreground="#FFCC44"/>
-
-                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="1" Grid.Column="1"
-                             Text="{Binding SessionSeconds, StringFormat='{}{0:F1}s'}"
-                             FontWeight="SemiBold"/>
-
-                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Mẫu" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="2" Grid.Column="1"
-                             Text="{Binding SampleCount}"
-                             FontWeight="SemiBold"/>
-
-                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Cao nhất" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="3" Grid.Column="1"
-                             Text="{Binding MaxSessionTemp, StringFormat='{}{0:F1}°C'}"
-                             FontWeight="SemiBold" Foreground="#FF6644"/>
-
-                  <TextBlock Grid.Row="4" Grid.Column="0" Text="Thấp nhất" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="4" Grid.Column="1"
-                             Text="{Binding MinSessionTemp, StringFormat='{}{0:F1}°C'}"
-                             FontWeight="SemiBold" Foreground="#66AAFF"/>
-                </Grid>
-              </StackPanel>
-            </Border>
-          </StackPanel>
-
-          <!-- === BOTTOM: Cố định phía dưới === -->
-          <StackPanel DockPanel.Dock="Bottom" Spacing="12">
-
-            <!-- Phiên trước -->
-            <Border Background="#18FFFFFF"
-                    CornerRadius="8"
-                    Padding="12"
-                    IsVisible="{Binding CompletedSessions}">
-              <StackPanel Spacing="8">
-                <TextBlock Text="PHIÊN TRƯỚC" FontSize="11" FontWeight="Bold" Foreground="#2196F3"/>
-
-                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
-                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Trung bình" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="0" Grid.Column="1"
-                             Text="{Binding LastAverageTemperature, StringFormat='{}{0:F1}°C'}"
-                             FontWeight="Bold" FontSize="16"
-                             Foreground="#44BBFF"/>
-
-                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="1" Grid.Column="1"
-                             Text="{Binding LastSessionSeconds, StringFormat='{}{0:F1}s'}"
-                             FontWeight="SemiBold"/>
-
-                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Mẫu" Foreground="#CCCCCC"/>
-                  <TextBlock Grid.Row="2" Grid.Column="1"
-                             Text="{Binding LastSampleCount}"
-                             FontWeight="SemiBold"/>
-                </Grid>
-              </StackPanel>
-            </Border>
-
-            <Separator Background="#44AAAAAA"/>
-
-            <!-- Tổng phiên — luôn hiện ở dưới cùng -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="6"
-                        Margin="0,0,0,4">
-              <TextBlock Text="Tổng phiên hoàn tất:" Foreground="#AAAAAA"/>
-              <TextBlock Text="{Binding CompletedSessions}"
-                         FontWeight="Bold" FontSize="16"/>
-            </StackPanel>
-          </StackPanel>
-
-          <!-- === CENTER: Trung bình theo phút — chiếm không gian còn lại === -->
-          <Border Background="#18FFFFFF"
-                  CornerRadius="8"
-                  Padding="12"
-                  Margin="0,12"
-                  IsVisible="{Binding IsSessionActive}">
-            <DockPanel>
-              <TextBlock DockPanel.Dock="Top"
-                         Text="📈 TRUNG BÌNH THEO PHÚT"
-                         FontSize="11" FontWeight="Bold" Foreground="#4CAF50"
-                         Margin="0,0,0,6"/>
-
-              <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding MinuteAverages}">
-                  <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="vm:MinuteAverageEntry">
-                      <Border Padding="4,3" Margin="0,1"
-                              Background="#10FFFFFF" CornerRadius="4">
-                        <Grid ColumnDefinitions="Auto,*,Auto">
-                          <Border Grid.Column="0"
-                                  Background="#334CAF50"
-                                  CornerRadius="3"
-                                  Padding="6,2"
-                                  Margin="0,0,8,0"
-                                  VerticalAlignment="Center">
-                            <TextBlock Text="{Binding TimeLabel}"
-                                       FontSize="11" FontWeight="Bold" Foreground="#4CAF50"
-                                       FontFamily="Consolas"/>
-                          </Border>
-                          <TextBlock Grid.Column="1"
-                                     Text="{Binding Average, StringFormat='{}{0:F1}°C'}"
-                                     FontWeight="Bold" FontSize="13"
-                                     Foreground="#FFCC44"
-                                     VerticalAlignment="Center"/>
-                          <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
-                                      VerticalAlignment="Center">
-                            <TextBlock Text="{Binding Min, StringFormat='↓{0:F0}'}"
-                                       FontSize="11" Foreground="#66AAFF"/>
-                            <TextBlock Text="{Binding Max, StringFormat='↑{0:F0}'}"
-                                       FontSize="11" Foreground="#FF6644"/>
-                          </StackPanel>
-                        </Grid>
+          <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding MinuteAverages}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:MinuteAverageEntry">
+                  <Border Padding="3,2" Margin="0,1"
+                          Background="#10FFFFFF" CornerRadius="3">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                      <Border Grid.Column="0"
+                              Background="#334CAF50"
+                              CornerRadius="3"
+                              Padding="4,1"
+                              Margin="0,0,4,0"
+                              VerticalAlignment="Center">
+                        <TextBlock Text="{Binding TimeLabel}"
+                                   FontSize="10" FontWeight="Bold" Foreground="#4CAF50"
+                                   FontFamily="Consolas"/>
                       </Border>
-                    </DataTemplate>
-                  </ItemsControl.ItemTemplate>
-                </ItemsControl>
-              </ScrollViewer>
-            </DockPanel>
-          </Border>
-
-        </DockPanel>        
+                      <TextBlock Grid.Column="1"
+                                 Text="{Binding Average, StringFormat='{}{0:F1}°'}"
+                                 FontWeight="Bold" FontSize="11"
+                                 Foreground="#FFCC44"
+                                 VerticalAlignment="Center"/>
+                      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="3"
+                                  VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Min, StringFormat='↓{0:F0}'}"
+                                   FontSize="10" Foreground="#66AAFF"/>
+                        <TextBlock Text="{Binding Max, StringFormat='↑{0:F0}'}"
+                                   FontSize="10" Foreground="#FF6644"/>
+                      </StackPanel>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </DockPanel>
       </Border>
     </Grid>
 </Window>
