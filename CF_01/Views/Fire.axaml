@@ -1,4 +1,4 @@
-﻿    <UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,6 +25,7 @@
 
         <!-- 3 GIF CANH GIỮA -->
         <gif:GifImage x:Name="FireLowGif"
+                      Opacity="0.6"
                       Source="avares://CF_01/Assets/FireL.gif"
                       VerticalAlignment="Bottom"
                       HorizontalAlignment="Center"
@@ -33,8 +34,9 @@
                       IsVisible="{Binding IsLowTemperature}"/>
 
         <gif:GifImage x:Name="FireNormalGif"
+                      Opacity="0.7"
                       Source="avares://CF_01/Assets/Fire.gif"
-                      Width="550" Height="550"
+                      Width="500" Height="500"
                       VerticalAlignment="Bottom"
                       HorizontalAlignment="Center"
                       StretchDirection="Both"
@@ -42,6 +44,7 @@
                       IsVisible="{Binding IsNormalTemperature}"/>
 
         <gif:GifImage x:Name="FireHighGif"
+                      Opacity="0.8"
                        Height="680" Width="800"
                        Source="avares://CF_01/Assets/FireH.gif"
                        VerticalAlignment="Center"
@@ -50,12 +53,39 @@
                        Stretch="UniformToFill"
                        IsVisible="{Binding IsHighTemperature}"/>
 
-        <!-- Fire temperature text effect - 3 layers -->
+        <!-- Fire temperature text effect - 5 layers -->
         <Panel HorizontalAlignment="Center"
-               VerticalAlignment="Top"
-               Margin="0,50,0,0">
+               VerticalAlignment="Center">
 
-          <!-- Layer 1: Outer glow (red/orange halo) -->
+          <!-- Layer 1: Strong black outline -->
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                     FontSize="180"
+                     FontWeight="ExtraBold"
+                     Foreground="Transparent"
+                     HorizontalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="Black"
+                                BlurRadius="{Binding ShadowBlurStrong}"
+                                Opacity="{Binding ShadowOpacityStrong}"
+                                OffsetX="0" OffsetY="0"/>
+            </TextBlock.Effect>
+          </TextBlock>
+
+          <!-- Layer 2: Second black outline for extra thickness -->
+          <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
+                     FontSize="180"
+                     FontWeight="ExtraBold"
+                     Foreground="Transparent"
+                     HorizontalAlignment="Center">
+            <TextBlock.Effect>
+              <DropShadowEffect Color="Black"
+                                BlurRadius="{Binding ShadowBlurMedium}"
+                                Opacity="{Binding ShadowOpacityMedium}"
+                                OffsetX="0" OffsetY="0"/>
+            </TextBlock.Effect>
+          </TextBlock>
+
+          <!-- Layer 3: Outer glow (red/orange halo) -->
           <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
                      FontSize="180"
                      FontWeight="ExtraBold"
@@ -69,7 +99,7 @@
             </TextBlock.Effect>
           </TextBlock>
 
-          <!-- Layer 2: Inner glow (yellow/orange closer glow) -->
+          <!-- Layer 4: Inner glow (yellow/orange closer glow) -->
           <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
                      FontSize="180"
                      FontWeight="ExtraBold"
@@ -83,14 +113,17 @@
             </TextBlock.Effect>
           </TextBlock>
 
-          <!-- Layer 3: Main text with fire gradient foreground -->
+          <!-- Layer 5: Main text with fire gradient + strong shadow -->
           <TextBlock Text="{Binding Temperature, StringFormat='{}{0:F1}'}"
                      FontSize="180"
                      FontWeight="ExtraBold"
                      Foreground="{Binding FireTextBrush}"
                      HorizontalAlignment="Center">
             <TextBlock.Effect>
-              <DropShadowEffect Color="Black" BlurRadius="3" Opacity="0.6" OffsetX="0" OffsetY="2"/>
+              <DropShadowEffect Color="Black" 
+                                BlurRadius="{Binding ShadowBlurMain}" 
+                                Opacity="{Binding ShadowOpacityMain}" 
+                                OffsetX="0" OffsetY="3"/>
             </TextBlock.Effect>
           </TextBlock>
         </Panel>

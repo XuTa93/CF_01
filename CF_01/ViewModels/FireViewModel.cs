@@ -42,6 +42,25 @@ public partial class FireViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private double _fireGlowOpacity = 0;
 
+    // Dynamic shadow properties - increase with temperature
+    [ObservableProperty]
+    private double _shadowBlurStrong = 20;
+
+    [ObservableProperty]
+    private double _shadowOpacityStrong = 1.0;
+
+    [ObservableProperty]
+    private double _shadowBlurMedium = 8;
+
+    [ObservableProperty]
+    private double _shadowOpacityMedium = 0.95;
+
+    [ObservableProperty]
+    private double _shadowBlurMain = 6;
+
+    [ObservableProperty]
+    private double _shadowOpacityMain = 0.85;
+
     // Ngưỡng nhiệt độ (sync từ RangeSlider)
     [ObservableProperty]
     private double _lowTempThreshold = 70.0;
@@ -247,11 +266,13 @@ public partial class FireViewModel : ObservableObject, IDisposable
     partial void OnLowTempThresholdChanged(double value)
     {
         UpdateFireDisplay();
+        UpdateFireTextEffect();
     }
 
     partial void OnHighTempThresholdChanged(double value)
     {
         UpdateFireDisplay();
+        UpdateFireTextEffect();
     }
 
     private void UpdateFireDisplay()
@@ -430,57 +451,92 @@ public partial class FireViewModel : ObservableObject, IDisposable
 
     private void UpdateFireTextEffect()
     {
-        // t: 0.0 (20°C) → 1.0 (110°C)
+        // t: 0.0 (20°C) → 1.0 (115°C)
         double t = Math.Clamp((Temperature - FireMinTemp) / (FireMaxTemp - FireMinTemp), 0, 1);
 
-        // === Text foreground: cool white → warm yellow → hot orange → white-hot ===
+        bool isInGreenZone = Temperature >= LowTempThreshold && Temperature < HighTempThreshold;
+
         Color textColor;
-        if (t < 0.3)
+        Color topColor;
+        Color bottomColor;
+
+        if (isInGreenZone)
         {
-            // White → Light yellow
-            textColor = LerpColor(Color.FromRgb(240, 240, 255), Color.FromRgb(255, 240, 150), t / 0.3);
-        }
-        else if (t < 0.6)
-        {
-            // Light yellow → Bright orange-yellow
-            textColor = LerpColor(Color.FromRgb(255, 240, 150), Color.FromRgb(255, 200, 60), (t - 0.3) / 0.3);
-        }
-        else if (t < 0.85)
-        {
-            // Bright orange-yellow → Orange
-            textColor = LerpColor(Color.FromRgb(255, 200, 60), Color.FromRgb(255, 140, 30), (t - 0.6) / 0.25);
+            // === GREEN ZONE: giữa Lower và Upper ===
+            // Tính vị trí trong green zone (0→1)
+            double g = Math.Clamp(
+                (Temperature - LowTempThreshold) / (HighTempThreshold - LowTempThreshold), 0, 1);
+
+            // Xanh nhạt → Xanh đậm sáng
+            textColor = LerpColor(
+                Color.FromRgb(100, 255, 150),
+                Color.FromRgb(50, 220, 80), g);
+
+            topColor = LerpColor(textColor, Color.FromRgb(30, 180, 60), 0.3);
+            bottomColor = LerpColor(textColor, Color.FromRgb(180, 255, 200), 0.25);
+
+            // Green glow
+            FireInnerGlowColor = LerpColor(
+                Color.FromRgb(100, 255, 120),
+                Color.FromRgb(50, 200, 80), g);
+            FireInnerGlowRadius = 5 + g * 20;
+
+            FireOuterGlowColor = LerpColor(
+                Color.FromRgb(60, 220, 100),
+                Color.FromRgb(30, 160, 60), g);
+            FireOuterGlowRadius = 10 + g * 35;
+
+            FireGlowOpacity = 0.3 + g * 0.5;
         }
         else
         {
-            // Orange → White-hot (extremely hot = bright white-yellow center)
-            textColor = LerpColor(Color.FromRgb(255, 140, 30), Color.FromRgb(255, 255, 220), (t - 0.85) / 0.15);
-        }
+            // === FIRE ZONE: dưới Lower hoặc trên Upper ===
+            if (t < 0.3)
+            {
+                textColor = LerpColor(Color.FromRgb(240, 240, 255), Color.FromRgb(255, 240, 150), t / 0.3);
+            }
+            else if (t < 0.6)
+            {
+                textColor = LerpColor(Color.FromRgb(255, 240, 150), Color.FromRgb(255, 200, 60), (t - 0.3) / 0.3);
+            }
+            else if (t < 0.85)
+            {
+                textColor = LerpColor(Color.FromRgb(255, 200, 60), Color.FromRgb(255, 140, 30), (t - 0.6) / 0.25);
+            }
+            else
+            {
+                textColor = LerpColor(Color.FromRgb(255, 140, 30), Color.FromRgb(255, 255, 220), (t - 0.85) / 0.15);
+            }
 
-        // Vertical gradient: top darker/redder (tip of flame) → bottom brighter (base)
-        var topColor = LerpColor(textColor, Color.FromRgb(255, 60, 10), Math.Min(t * 0.7, 0.55));
-        var bottomColor = LerpColor(textColor, Color.FromRgb(255, 255, 240), 0.25);
+            topColor = LerpColor(textColor, Color.FromRgb(255, 60, 10), Math.Min(t * 0.7, 0.55));
+            bottomColor = LerpColor(textColor, Color.FromRgb(255, 255, 240), 0.25);
+
+            // Fire glow
+            FireInnerGlowColor = LerpColor(
+                Color.FromRgb(255, 220, 80),
+                Color.FromRgb(255, 120, 20), t);
+            FireInnerGlowRadius = 2 + t * 30;
+
+            FireOuterGlowColor = LerpColor(
+                Color.FromRgb(255, 160, 30),
+                Color.FromRgb(220, 20, 0), t);
+            FireOuterGlowRadius = 5 + t * 55;
+
+            FireGlowOpacity = 0.05 + t * 0.9;
+        }
 
         _reusableTextBrush.GradientStops[0] = new GradientStop(topColor, 0);
         _reusableTextBrush.GradientStops[1] = new GradientStop(textColor, 0.45);
         _reusableTextBrush.GradientStops[2] = new GradientStop(bottomColor, 1.0);
         FireTextBrush = _reusableTextBrush;
 
-        // === Inner glow: yellow → orange, grows with temperature ===
-        FireInnerGlowColor = LerpColor(
-            Color.FromRgb(255, 220, 80),
-            Color.FromRgb(255, 120, 20),
-            t);
-        FireInnerGlowRadius = 2 + t * 30;
-
-        // === Outer glow: orange → deep red, larger radius ===
-        FireOuterGlowColor = LerpColor(
-            Color.FromRgb(255, 160, 30),
-            Color.FromRgb(220, 20, 0),
-            t);
-        FireOuterGlowRadius = 5 + t * 55;
-
-        // === Glow opacity: subtle → intense ===
-        FireGlowOpacity = 0.05 + t * 0.9;
+        // === Shadow intensity: increases with temperature ===
+        ShadowBlurStrong = 20 + t * 20;
+        ShadowOpacityStrong = 1.0;
+        ShadowBlurMedium = 8 + t * 8;
+        ShadowOpacityMedium = 0.95 + t * 0.05;
+        ShadowBlurMain = 6 + t * 9;
+        ShadowOpacityMain = 0.85 + t * 0.15;
     }
 
     private static Color LerpColor(Color from, Color to, double t)

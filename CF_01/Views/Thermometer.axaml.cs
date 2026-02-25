@@ -30,9 +30,9 @@ public partial class Thermometer : UserControl
     {
         const double minTemp = 30.0;
         const double maxTemp = 120.0;
-        const double canvasHeight = 620.0;
-        const double topPadding = 15.0;
-        const double bottomPadding = 15.0;
+        const double canvasHeight = 650.0;
+        const double topPadding = 25.0;
+        const double bottomPadding = 35.0;
         const double usableHeight = canvasHeight - topPadding - bottomPadding;
         const double tickX = 66.0; // Right edge of mercury column
 
