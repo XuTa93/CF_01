@@ -140,7 +140,7 @@
         <StackPanel Spacing="6">
           <!-- Clock -->
           <StackPanel Spacing="1" HorizontalAlignment="Center">
-            <TextBlock Text="{Binding SimulatedTimeText}"
+            <TextBlock Text="{Binding CurrentTimeText}"
                        FontSize="28"
                        FontWeight="Bold"
                        FontFamily="Consolas"
@@ -150,11 +150,29 @@
                 <DropShadowEffect Color="Black" BlurRadius="6" Opacity="0.8"/>
               </TextBlock.Effect>
             </TextBlock>
-            <TextBlock Text="{Binding SimulatedPeriod}"
-                       FontSize="11"
-                       FontWeight="SemiBold"
-                       Foreground="#DDDDDD"
+            <TextBlock Text="{Binding SensorSourceName}"
+                       FontSize="9"
+                       Foreground="#AAAAAA"
                        HorizontalAlignment="Center"/>
+          </StackPanel>
+
+          <Border Height="1" Background="#44AAAAAA"/>
+
+          <!-- Thời gian chạy -->
+          <StackPanel Spacing="2">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="Đã chạy:" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Text="{Binding ProgramElapsedText}"
+                         FontWeight="Bold" FontSize="11" Foreground="White"
+                         FontFamily="Consolas"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4"
+                        IsVisible="{Binding IsSessionActive}">
+              <TextBlock Text="BĐ đo:" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Text="{Binding SessionStartTimeText}"
+                         FontWeight="Bold" FontSize="11" Foreground="#4CAF50"
+                         FontFamily="Consolas"/>
+            </StackPanel>
           </StackPanel>
 
           <Border Height="1" Background="#44AAAAAA"/>
@@ -189,7 +207,7 @@
           <StackPanel Spacing="4">
             <TextBlock Text="🔥 PHIÊN HIỆN TẠI" FontSize="10" FontWeight="Bold" Foreground="#FF9800"/>
 
-            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="2">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="2">
               <TextBlock Grid.Row="0" Grid.Column="0" Text="TB" FontSize="10" Foreground="#AAAAAA"/>
               <TextBlock Grid.Row="0" Grid.Column="1"
                          Text="{Binding AverageTemperature, StringFormat='{}{0:F1}°C'}"
@@ -197,7 +215,7 @@
 
               <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" FontSize="10" Foreground="#AAAAAA"/>
               <TextBlock Grid.Row="1" Grid.Column="1" FontSize="10" Foreground="White"
-                         Text="{Binding SessionSeconds, StringFormat='{}{0:F1}s'}"
+                         Text="{Binding SessionElapsedText}"
                          FontWeight="SemiBold"/>
 
               <TextBlock Grid.Row="2" Grid.Column="0" Text="Max" FontSize="10" Foreground="#AAAAAA"/>
@@ -209,6 +227,11 @@
               <TextBlock Grid.Row="3" Grid.Column="1" FontSize="10"
                          Text="{Binding MinSessionTemp, StringFormat='{}{0:F1}°C'}"
                          FontWeight="SemiBold" Foreground="#66AAFF"/>
+
+              <TextBlock Grid.Row="4" Grid.Column="0" Text="Chu kỳ" FontSize="10" Foreground="#AAAAAA"/>
+              <TextBlock Grid.Row="4" Grid.Column="1" FontSize="9" Foreground="#88CC88"
+                         Text="{Binding IntervalProgressText}"
+                         FontWeight="SemiBold"/>
             </Grid>
           </StackPanel>
         </Border>
@@ -229,7 +252,7 @@
 
               <TextBlock Grid.Row="1" Grid.Column="0" Text="Thời gian" FontSize="10" Foreground="#AAAAAA"/>
               <TextBlock Grid.Row="1" Grid.Column="1" FontSize="10" Foreground="White"
-                         Text="{Binding LastSessionSeconds, StringFormat='{}{0:F1}s'}"
+                         Text="{Binding LastSessionElapsedText}"
                          FontWeight="SemiBold"/>
 
               <TextBlock Grid.Row="2" Grid.Column="0" Text="Mẫu" FontSize="10" Foreground="#AAAAAA"/>

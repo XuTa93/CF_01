@@ -47,12 +47,10 @@ public partial class Fire : UserControl
         }
     }
 
-    // Property để access ViewModel từ bên ngoài
     public FireViewModel? ViewModel => DataContext as FireViewModel;
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        // Unsubscribe tất cả event handlers để tránh memory leak
         if (_fireViewModel != null && _firePropertyHandler != null)
             _fireViewModel.PropertyChanged -= _firePropertyHandler;
 

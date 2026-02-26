@@ -1,18 +1,26 @@
+using System;
+
 namespace CF_01.ViewModels;
 
-public class MinuteAverageEntry
+/// <summary>
+/// Entry hiển thị trung bình theo chu kỳ cài đặt trên UI.
+/// </summary>
+public class IntervalAverageEntry
 {
-    public int Minute { get; }
-    public string TimeLabel { get; }
+    public int Index { get; }
+    public string StartTimeText { get; }
+    public string EndTimeText { get; }
     public double Average { get; }
     public double Min { get; }
     public double Max { get; }
     public int Samples { get; }
 
-    public MinuteAverageEntry(int minute, string timeLabel, double average, double min, double max, int samples)
+    public IntervalAverageEntry(int index, DateTime startTime, DateTime endTime,
+        double average, double min, double max, int samples)
     {
-        Minute = minute;
-        TimeLabel = timeLabel;
+        Index = index;
+        StartTimeText = startTime.ToString("HH:mm:ss");
+        EndTimeText = endTime.ToString("HH:mm:ss");
         Average = average;
         Min = min;
         Max = max;
