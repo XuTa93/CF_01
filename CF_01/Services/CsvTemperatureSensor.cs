@@ -29,6 +29,7 @@ public class CsvTemperatureSensor : ITemperatureSensor
     public CsvTemperatureSensor(string csvFilePath)
     {
         _filePath = csvFilePath;
+        CreateSampleCsv(csvFilePath); // Always overwrite file on each run
         LoadCsv(csvFilePath);
     }
 

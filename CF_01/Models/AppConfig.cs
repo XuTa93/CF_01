@@ -37,7 +37,7 @@ public class AppConfig
     public int SamplesPerStoredReading { get; set; } = 10;
 
     /// <summary>Chu kỳ ghi nhiệt độ trung bình (giây). Mặc định 600 (10 phút).</summary>
-    public int AverageIntervalSeconds { get; set; } = 30;
+    public int AverageIntervalSeconds { get; set; } = 60;
 
     // === Modbus RTU ===
 
