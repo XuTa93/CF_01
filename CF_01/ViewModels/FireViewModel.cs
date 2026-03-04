@@ -178,7 +178,8 @@ public partial class FireViewModel : ObservableObject, IDisposable
     public FireViewModel()
     {
         _config = AppConfig.Load();
-        _sensor = CreateSensor(_config);
+
+        _sensor = new ModbusTemperatureSensor(_config);
         SensorSourceName = _sensor.SourceName;
 
         // Tính ticks từ config
@@ -210,16 +211,6 @@ public partial class FireViewModel : ObservableObject, IDisposable
         };
         _timer.Tick += OnTimerTick;
         _timer.Start();
-    }
-
-    private static ITemperatureSensor CreateSensor(AppConfig config)
-    {
-        return config.TemperatureSource.ToLowerInvariant() switch
-        {
-            "csv" => new CsvTemperatureSensor(config.CsvFilePath),
-            // "modbus" => new ModbusTemperatureSensor(config), // Bước tương lai
-            _ => new BuiltInSimulatorSensor()
-        };
     }
 
     private void OnTimerTick(object? sender, EventArgs e)

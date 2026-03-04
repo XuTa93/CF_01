@@ -25,5 +25,6 @@
     <PackageReference Include="Avalonia_Gif" Version="1.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
+    <PackageReference Include="System.IO.Ports" Version="10.0.3" />
   </ItemGroup>
 </Project>

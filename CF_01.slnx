@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="CF_01/CF_01.csproj" />
+  <Project Path="CF_01_Simulation/CF_01_Simulation.csproj" Id="b36c1a39-e7b9-43bf-a9bc-509b424eda56" />
 </Solution>

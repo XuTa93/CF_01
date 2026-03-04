@@ -56,14 +56,6 @@ public class AppConfig
     /// <summary>Hệ số chia giá trị register (VD: register=245 ÷ 10 = 24.5°C).</summary>
     public double ModbusScaleFactor { get; set; } = 10.0;
 
-    // === Nguồn dữ liệu ===
-
-    /// <summary>Chế độ nguồn nhiệt độ: "Simulator", "Modbus", "CSV".</summary>
-    public string TemperatureSource { get; set; } = "Simulator";
-
-    /// <summary>Đường dẫn file CSV cho chế độ CSV simulator.</summary>
-    public string CsvFilePath { get; set; } = "temperature_data.csv";
-
     // === Hiển thị ===
 
     /// <summary>Ngưỡng dưới mặc định cho RangeSlider (hiển thị lửa xanh).</summary>
