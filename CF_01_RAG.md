@@ -6,7 +6,7 @@
 - **CF_01** — App chính (Avalonia UI), đọc nhiệt độ qua Modbus RTU Master (COM3)
 - **CF_01_Simulation** — Giả lập cảm biến (Console), phát dữ liệu CSV qua Modbus RTU Slave (COM2)
 
-Giao tiếp: `CF_01_Simulation (COM2)` ↔ virtual COM pair (com0com) ↔ `CF_01 (COM3)`
+Giao tiếp: `CF_01_Simulation (COM2)` ↔ virtual COM pair  ↔ `CF_01 (COM3)`
 
 ---
 
@@ -135,14 +135,15 @@ Exception Response:
 ```
 # Comment lines start with #
 25.0
-25.3
-30.5
+25.2
+25.4
 ...
 ```
 
 - Mỗi dòng = 1 giá trị nhiệt độ (°C)
 - Hỗ trợ dấu `,` và `.` cho số thập phân
 - Mặc định 7200 dòng (1 dòng/giây = 2 giờ)
+- Nhiệt độ phải tăng giảm hợp lý, tăng giảm giống như lò nhiệt
 
 ### 4 giai đoạn sấy mẫu
 
